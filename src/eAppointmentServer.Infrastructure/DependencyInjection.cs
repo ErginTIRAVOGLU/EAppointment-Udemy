@@ -1,4 +1,3 @@
-using System;
 using eAppointmentServer.Application.Services;
 using eAppointmentServer.Domain.Entities.AppRole;
 using eAppointmentServer.Domain.Entities.AppUser;

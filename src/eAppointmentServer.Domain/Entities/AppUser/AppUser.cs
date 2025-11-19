@@ -5,6 +5,9 @@ namespace eAppointmentServer.Domain.Entities.AppUser;
 
 public sealed class AppUser : IdentityUser<Guid>
 {
+    // Parameterless constructor for EF Core
+    private AppUser() { }
+    
     public AppUser(FirstName firstName, LastName lastName)
     {
         Id = Guid.CreateVersion7();

@@ -5,6 +5,8 @@ namespace eAppointmentServer.Domain.Entities.Patient;
 
 public sealed class Patient
 {
+    // Parameterless constructor for EF Core
+    private Patient() { }
 
     public Patient(FirstName firstName, LastName lastName, IdentityNumber identityNumber, Address address)
     {

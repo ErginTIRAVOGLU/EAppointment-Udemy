@@ -1,4 +1,3 @@
-using System;
 using eAppointmentServer.Domain.Entities.Doctor.ValueObjects;
 using eAppointmentServer.Domain.Entities.Shared.ValueObjects;
 
@@ -6,7 +5,10 @@ namespace eAppointmentServer.Domain.Entities.Doctor;
 
 public sealed class Doctor
 {
-    public Doctor(FirstName firstName, LastName lastName, DepartmentId department)
+    // Parameterless constructor for EF Core
+    private Doctor() { }
+    
+    public Doctor(FirstName firstName, LastName lastName, Department department)
     {
         Id = new DoctorId(Guid.CreateVersion7());
         SetFirstName(firstName);
@@ -18,9 +20,17 @@ public sealed class Doctor
     public FirstName FirstName { get; private set; } 
     public LastName LastName { get; private set; } 
     public string FullName => $"{FirstName.Value} {LastName.Value}";
-    public DepartmentId Department { get; private set; } 
+    public Department Department { get; private set; } 
 
-    #region Methods
+    #region Methods         
+
+    public void Update(FirstName firstName, LastName lastName, Department department)
+    {
+        SetFirstName(firstName);
+        SetLastName(lastName);
+        SetDepartment(department);
+    }
+
     private void SetFirstName(FirstName firstName)
     {
         FirstName = firstName;
@@ -29,9 +39,11 @@ public sealed class Doctor
     {
         LastName = lastName;
     }
-    private void SetDepartment(DepartmentId department)
+    private void SetDepartment(Department department)
     {
         Department = department;
     }
+
+  
     #endregion
 }

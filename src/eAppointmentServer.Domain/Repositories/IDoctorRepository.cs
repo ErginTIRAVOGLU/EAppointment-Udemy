@@ -1,4 +1,3 @@
-using System;
 using eAppointmentServer.Domain.Entities.Doctor;
 using GenericRepository;
 

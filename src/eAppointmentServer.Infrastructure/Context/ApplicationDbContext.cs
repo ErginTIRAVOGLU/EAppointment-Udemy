@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using eAppointmentServer.Domain.Entities.Appointment;
 using eAppointmentServer.Domain.Entities.AppRole;
@@ -23,13 +22,16 @@ internal sealed class ApplicationDbContext : IdentityDbContext<AppUser,AppRole,G
     public DbSet<Appointment> Appointments  { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
-    {
+    { 
+        // Ignore unused Identity tables
         builder.Ignore<IdentityUserClaim<Guid>>();
         builder.Ignore<IdentityRoleClaim<Guid>>();
         builder.Ignore<IdentityUserLogin<Guid>>();
         builder.Ignore<IdentityUserToken<Guid>>(); 
 
+        // Call base to configure Identity tables (includes IdentityUserRole composite key)
+        base.OnModelCreating(builder);
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
     }
 }

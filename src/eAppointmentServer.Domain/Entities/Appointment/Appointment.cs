@@ -1,4 +1,3 @@
-using System;
 using eAppointmentServer.Domain.Entities.Appointment.ValueObjects;
 using eAppointmentServer.Domain.Entities.Doctor.ValueObjects;
 using eAppointmentServer.Domain.Entities.Patient;
@@ -7,6 +6,9 @@ namespace eAppointmentServer.Domain.Entities.Appointment;
 
 public sealed class Appointment
 {
+    // Parameterless constructor for EF Core
+    private Appointment() { }
+    
     public Appointment(AppointmentId id, DoctorId doctorId, PatientId patientId, DateTime startDate, DateTime endDate,  bool isCompleted)
     {
         Id = id;

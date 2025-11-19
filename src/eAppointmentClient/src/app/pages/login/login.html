@@ -1,0 +1,44 @@
+<div class="row d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 com-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sign In</h3>
+                <p>Enter your credentials to access your account.</p>
+            </div>
+            <div class="card-body">
+                <form #loginForm="ngForm" formValidate>
+                    <div class="form-group">
+                        <label for="email">UserName or Email</label>
+                        <input [(ngModel)]="loginModel().usernameOrEmail" type="text" class="form-control" id="usernameOrEmail" name="usernameOrEmail" placeholder="Enter username or email" required minlength="3">
+                        <div class="invalid-feedback">
+                            Username or Email is required and must be at least 3 characters long.
+                        </div>
+                    </div>
+                    <div class="form-group mt-2 position-relative">
+                        <label for="password">Password</label>
+                        <input [(ngModel)]="loginModel().password" type="password" #passwordInput class="form-control" id="password" name="password" placeholder="Enter password" required minlength="6">
+                        <div class="invalid-feedback">
+                            Password is required and must be at least 6 characters long.
+                        </div>
+                        @if(passwordInput.type === 'password') {
+                            
+                            <i class="fa-solid fa-eye login-eye" (click)="showOrHidePassword()"></i>
+                        }@else {
+                           
+                            <i class="fa-solid fa-eye-slash login-eye" (click)="showOrHidePassword()"></i>
+                        }
+                    
+                        
+                        
+                    </div>
+                    <div class="form-group mt-2">
+                        <button class="btn btn-dark w-100" (click)="signIn(loginForm)">
+                            <i class="fa-solid fa-lock me-1"></i>
+                            Login</button>
+                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

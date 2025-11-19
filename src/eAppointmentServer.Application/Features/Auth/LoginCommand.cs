@@ -1,4 +1,4 @@
-using System;
+using System.Net;
 using eAppointmentServer.Application.Services;
 using eAppointmentServer.Domain.Entities.AppUser;
 using ErginWebDev.Result;
@@ -28,13 +28,13 @@ internal sealed class LoginCommandHandler(
         
         if (user is null)
         {
-            return Result<LoginCommandResponse>.Fail("Invalid username or password.",statusCode: System.Net.HttpStatusCode.NotFound);
+            return Result<LoginCommandResponse>.Fail("Invalid username or password.",statusCode : HttpStatusCode.Unauthorized);
         }
 
         bool isPasswordValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPasswordValid)
         {
-            return Result<LoginCommandResponse>.Fail("Invalid username or password.");
+            return Result<LoginCommandResponse>.Fail("Invalid username or password.",statusCode : HttpStatusCode.Unauthorized);
         }
         var token = jwtProvider.GenerateToken(user);
         return Result<LoginCommandResponse>.Success(new LoginCommandResponse(Token: token));

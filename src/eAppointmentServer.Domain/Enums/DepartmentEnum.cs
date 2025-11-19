@@ -1,4 +1,3 @@
-using System;
 using Ardalis.SmartEnum;
 
 namespace eAppointmentServer.Domain.Enums;
@@ -6,10 +5,10 @@ namespace eAppointmentServer.Domain.Enums;
 public sealed class DepartmentEnum : SmartEnum<DepartmentEnum>
 {
     public static readonly DepartmentEnum Acil = new("Acil", 1);
-    public static readonly DepartmentEnum Cocuk = new("Cocuk", 2);
+    public static readonly DepartmentEnum Cocuk = new("Çocuk", 2);
     public static readonly DepartmentEnum Dahiliye = new("Dahiliye", 3);
-    public static readonly DepartmentEnum Dis = new("Dis", 4);
-    public static readonly DepartmentEnum Goz = new("Goz", 5);
+    public static readonly DepartmentEnum Dis = new("Diş", 4);
+    public static readonly DepartmentEnum Goz = new("Göz", 5);
     public static readonly DepartmentEnum KBB = new("KBB", 6);
     public static readonly DepartmentEnum Ortopedi = new("Ortopedi", 7);
     public static readonly DepartmentEnum Psikiyatri = new("Psikiyatri", 8);

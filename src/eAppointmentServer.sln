@@ -5,15 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eAppointmentServer.Domain", "eAppointmentServer.Domain\eAppointmentServer.Domain.csproj", "{0293959E-CC7D-4A8D-AB55-09A31DE56070}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StronglyTypedIds-main", "StronglyTypedIds-main", "{0AB16079-68E3-529B-E496-C7064DB97515}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED6626FD-B1B7-3606-DBE2-6ED728B945EC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErginWebDev.StronglyTypedIds", "StronglyTypedIds-main\src\ErginWebDev.StronglyTypedIds\ErginWebDev.StronglyTypedIds.csproj", "{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eAppointmentServer.Application", "eAppointmentServer.Application\eAppointmentServer.Application.csproj", "{D1930B3E-DCDF-43A9-BA1D-D815A38DC2A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eAppointmentServer.Infrastructure", "eAppointmentServer.Infrastructure\eAppointmentServer.Infrastructure.csproj", "{A8AAA536-E850-4E2E-B5D1-C6A5186A6A3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eAppointmentServer.WebAPI", "eAppointmentServer.WebAPI\eAppointmentServer.WebAPI.csproj", "{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +33,6 @@ Global
 		{0293959E-CC7D-4A8D-AB55-09A31DE56070}.Release|x64.Build.0 = Release|Any CPU
 		{0293959E-CC7D-4A8D-AB55-09A31DE56070}.Release|x86.ActiveCfg = Release|Any CPU
 		{0293959E-CC7D-4A8D-AB55-09A31DE56070}.Release|x86.Build.0 = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|x64.Build.0 = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Debug|x86.Build.0 = Debug|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|x64.ActiveCfg = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|x64.Build.0 = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|x86.ActiveCfg = Release|Any CPU
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB}.Release|x86.Build.0 = Release|Any CPU
 		{D1930B3E-DCDF-43A9-BA1D-D815A38DC2A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1930B3E-DCDF-43A9-BA1D-D815A38DC2A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1930B3E-DCDF-43A9-BA1D-D815A38DC2A5}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -73,12 +57,20 @@ Global
 		{A8AAA536-E850-4E2E-B5D1-C6A5186A6A3C}.Release|x64.Build.0 = Release|Any CPU
 		{A8AAA536-E850-4E2E-B5D1-C6A5186A6A3C}.Release|x86.ActiveCfg = Release|Any CPU
 		{A8AAA536-E850-4E2E-B5D1-C6A5186A6A3C}.Release|x86.Build.0 = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|x64.Build.0 = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Debug|x86.Build.0 = Debug|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|x64.ActiveCfg = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|x64.Build.0 = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBA5EDDA-CBFA-4EAC-83EC-96A75D163D84}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{ED6626FD-B1B7-3606-DBE2-6ED728B945EC} = {0AB16079-68E3-529B-E496-C7064DB97515}
-		{0F0B6BA3-3140-412B-A60B-BD14E8E443EB} = {ED6626FD-B1B7-3606-DBE2-6ED728B945EC}
 	EndGlobalSection
 EndGlobal

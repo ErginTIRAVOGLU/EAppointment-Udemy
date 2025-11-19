@@ -1,4 +1,3 @@
-using System;
 using eAppointmentServer.Domain.Entities.Appointment;
 using eAppointmentServer.Domain.Repositories;
 using eAppointmentServer.Infrastructure.Context;
