@@ -5,6 +5,7 @@ import { initialLoginModel, LoginModel } from '../../models/login.model';
 import { FormValidateDirective } from 'form-validate-angular';
 import { HttpService } from '../../services/http-service';
 import { LoginResponseModel } from '../../models/login-response.model';
+import { SwalService } from '../../services/swal-service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,13 @@ import { LoginResponseModel } from '../../models/login-response.model';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit {
+export class Login  {
   readonly #httpService = inject(HttpService);
 
-  ngOnInit(): void {}
-  constructor() {}
+ 
   readonly #router = inject(Router);
   readonly loginModel = signal<LoginModel>(initialLoginModel);
+  readonly swal = inject(SwalService);
 
   passwordInput = viewChild<ElementRef<HTMLInputElement> | undefined>('passwordInput');
 
@@ -36,15 +37,14 @@ export class Login implements OnInit {
 
   signIn(form: NgForm) {
     if (form.valid) {
-      this.#httpService.post<LoginResponseModel>(
-        'auth/login',
-        this.loginModel(),
+      this.#httpService.post<LoginResponseModel>('auth/login',this.loginModel(),
         (response) => {
           localStorage.setItem('token', response.data?.token || '');
           this.#router.navigateByUrl('/');
         },
         (err) => {
-          console.error(err.error.message);
+          this.swal.callToast(err.error.message, 'error');
+           
         }
       );
     }

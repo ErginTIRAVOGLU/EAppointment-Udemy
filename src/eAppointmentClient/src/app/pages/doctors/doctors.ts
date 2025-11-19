@@ -7,10 +7,11 @@ import { FormsModule, NgForm } from "@angular/forms";
 import { DepartmentModel } from '../../models/department.model';
 import { FormValidateDirective } from 'form-validate-angular';
 import { SwalService } from '../../services/swal-service';
+import { DoctorPipe } from '../../pipes/doctor-pipe';
 
 @Component({
   selector: 'app-doctors',
-  imports: [RouterLink, FormsModule,FormValidateDirective],
+  imports: [RouterLink, FormsModule,FormValidateDirective,DoctorPipe],
   templateUrl: './doctors.html',
   styleUrl: './doctors.css',
 })
@@ -18,6 +19,7 @@ export class Doctors implements OnInit {
   readonly #http = inject(HttpService);
   readonly #swal = inject(SwalService);
   readonly doctors = signal<DoctorModel[]>([]);
+  readonly search = signal<string>('');
   readonly doctorFormModel = signal<DoctorModel>(initialDoctorModel);
   readonly doctorUpdateFormModel = signal<DoctorModel>(initialDoctorModel);
 
