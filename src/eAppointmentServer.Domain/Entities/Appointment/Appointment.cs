@@ -9,9 +9,9 @@ public sealed class Appointment
     // Parameterless constructor for EF Core
     private Appointment() { }
     
-    public Appointment(AppointmentId id, DoctorId doctorId, PatientId patientId, DateTime startDate, DateTime endDate,  bool isCompleted)
+    public Appointment(DoctorId doctorId, PatientId patientId, DateTime startDate, DateTime endDate,  bool isCompleted)
     {
-        Id = id;
+        Id =  new AppointmentId(Guid.CreateVersion7());
         SetDoctorId(doctorId);
         SetPatientId(patientId);
         SetStartDate(startDate);
@@ -19,15 +19,23 @@ public sealed class Appointment
         SetIsCompleted(isCompleted);
     }
 
-    public AppointmentId Id { get; set; }
-    public DoctorId DoctorId { get; set; }
-    public PatientId PatientId { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public bool IsCompleted { get; set; }
-
+    public AppointmentId Id { get; private  set; }
+    public DoctorId DoctorId { get; private set; }
+    public PatientId PatientId { get; private set; }
+    public DateTime StartDate { get; private set; }
+    public DateTime EndDate { get; private set; }
+    public bool IsCompleted { get; private set; }
+    
     #region Methods
-
+    public void Update(DoctorId doctorId, PatientId patientId, DateTime startDate, DateTime endDate,  bool isCompleted)
+    { 
+        SetDoctorId(doctorId);
+        SetPatientId(patientId);
+        SetStartDate(startDate);
+        SetEndDate(endDate);
+        SetIsCompleted(isCompleted);
+    }
+ 
     private void SetDoctorId(DoctorId doctorId)
     {
         DoctorId = doctorId;
