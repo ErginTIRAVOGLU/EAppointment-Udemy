@@ -27,6 +27,14 @@ public sealed class Patient
     public Address Address { get; private set; }
 
     #region Methods
+
+     public void Update(FirstName firstName, LastName lastName, IdentityNumber identityNumber, Address address)
+    {
+        SetFirstName(firstName);
+        SetLastName(lastName);
+        SetIdentityNumber(identityNumber);
+        SetAddress(address);
+    }
     
     private void SetFirstName(FirstName firstName)
     {

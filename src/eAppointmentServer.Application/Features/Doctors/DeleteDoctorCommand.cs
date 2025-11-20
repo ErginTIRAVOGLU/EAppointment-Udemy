@@ -8,16 +8,16 @@ using TS.MediatR;
 
 namespace eAppointmentServer.Application.Features.Doctors;
 
-public sealed record DeleteDoctorByIdCommand(
+public sealed record DeleteDoctorCommand(
     Guid Id
 ) : IRequest<Result<string>>;
 
-internal sealed class DeleteDoctorByIdCommandHandler(
+internal sealed class DeleteDoctorCommandHandler(
     IDoctorRepository doctorRepository,
     IUnitOfWork unitOfWork
-) : IRequestHandler<DeleteDoctorByIdCommand, Result<string>>
+) : IRequestHandler<DeleteDoctorCommand, Result<string>>
 {
-    public async Task<Result<string>> Handle(DeleteDoctorByIdCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(DeleteDoctorCommand request, CancellationToken cancellationToken)
     {
         var doctorId = new DoctorId(request.Id);
         var doctor = await doctorRepository.GetByExpressionAsync(d => d.Id == doctorId, cancellationToken);

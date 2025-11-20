@@ -1,1 +1,202 @@
-<p>home works!</p>
+<div class="mt-2 d-flex justify-content-beetween align-items-center">
+    <h3>Welcome to e-Appointment Application</h3>
+</div>
+<div class="mt-3">
+     <div class="form-group">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8 col-md-6 col-sm-12 col-12">
+                @if( selectedDoctorId() != '0' )
+                {
+                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fa-solid fa-plus me-1"></i> 
+                        <span>Add Appointment</span>
+                    </button>
+                }                
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12 position-relative">
+                @if(appointments().length > 0)
+                {   
+                    <input [(ngModel)]="search" type="search" class="form-control" placeholder="Search appointment...">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                }                
+            </div>
+        </div>
+     </div>
+</div>
+
+<div class="mt-2">
+    <div class="row">
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mt-1">
+            <label>Department</label>
+            <select [ngModel]="selectedDepartmentValue()" (ngModelChange)="onDepartmentChange($event)" name="department" class="form-select">
+                <option [value]="0">All Departments</option>
+                @for(department of departments();track department)
+                {
+                    <option [value]="department.value">{{department.name}}</option>
+                }
+            </select>
+        </div> 
+        @if(showDoctorSelect())
+        {
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mt-1">
+                <label>Doctor</label>
+                @if(doctors().length == 0){
+                    <input class="form-control" value="No doctors available" disabled />
+                } @else { 
+                    <select [ngModel]="selectedDoctorId()" (ngModelChange)="onDoctorChange($event);" name="doctor" class="form-select">
+                        <option [value]="0">All Doctors</option>
+                        @for(doctor of doctors();track doctor)
+                        {
+                            <option [value]="doctor.id">{{doctor.fullName}}</option>
+                        }
+                    </select>
+                }
+                
+            </div> 
+        }
+         
+    </div>
+
+    <div class="mt-2">
+        @if(appointments().length == 0){
+            <label>No appointments found.</label>
+        } @else {
+
+            @for(appointment of appointments() | appointment : search() ; track appointment){
+                <label>{{appointment.id}} - {{appointment.startDate | date:'short'}} - {{appointment.endDate | date:'short'}}  {{appointment.title}} - {{appointment.patientIdentityNumber}} {{appointment.patientFullName}} ({{appointment.patientAddress}})</label>
+                <br />
+            }
+        }
+    </div>
+</div>
+
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addModalLabel">Add Appointment</h1>
+        <button type="button" #addModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #addForm="ngForm" formValidate (ngSubmit)="add(addForm)" >
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="identityNumber" class="form-label">Identity Number</label>
+                <input (keydown)="getPatient($event)" [(ngModel)]="appointmentCreateFormModel().patientIdentityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid identity number.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientFirstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid first name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientLastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid last name.
+                </div>
+            </div>
+           <div class="form-group">
+                <label for="patientCity" class="form-label">Patient City</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientCity" name="patientCity" type="text" id="patientCity" class="form-control" placeholder="Enter patient city" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient city.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientTown" class="form-label">Patient Town</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientTown" name="patientTown" type="text" id="patientTown" class="form-control" placeholder="Enter patient town" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient town.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientFullAddress" class="form-label">Patient Full Address</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientFullAddress" name="patientFullAddress" type="text" id="patientFullAddress" class="form-control" placeholder="Enter patient full address" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient full address.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input [(ngModel)]="appointmentCreateFormModel().startDate" name="startDate" type="datetime-local" id="startDate" class="form-control" placeholder="Enter start date" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid start date.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="form-label">End Date</label>
+                <input [(ngModel)]="appointmentCreateFormModel().endDate" name="endDate" type="datetime-local" id="endDate" class="form-control" placeholder="Enter end date" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid end date.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-dark w-100">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateModalLabel">Update Doctor</h1>
+        <button type="button" #updateModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #updateForm="ngForm" formValidate (ngSubmit)="update(updateForm)" >
+        <div class="modal-body">           
+            <div class="form-group">
+                <label for="identityNumber" class="form-label">Identity Number</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().patientIdentityNumber" name="updateIdentityNumber" type="text" id="updateIdentityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid identity number.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().patientFullName" name="updateFullName" type="text" id="updateFullName" class="form-control" placeholder="Enter full name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid full name.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientAddress" class="form-label">Patient Address</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().patientAddress" name="updatePatientAddress" type="text" id="updatePatientAddress" class="form-control" placeholder="Enter patient address" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient address.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().startDate" name="updateStartDate" type="text" id="updateStartDate" class="form-control" placeholder="Enter start date" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid start date.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="form-label">End Date</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().endDate" name="updateEndDate" type="text" id="updateEndDate" class="form-control" placeholder="Enter end date" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid end date.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-primary w-100">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

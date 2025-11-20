@@ -1,1 +1,182 @@
-<p>patients works!</p>
+<div class="mt-3 d-flex justify-content-between align-items-center">
+    <h3>Patients Page</h3>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Patients</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="mt-3">
+     <div class="form-group">
+        <div class="row">
+            <div class="col-xl-9 col-lg-8 col-md-6 col-sm-12 col-12">
+                <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <i class="fa-solid fa-plus me-1"></i> 
+                    <span>Add Patient</span>
+                </button>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-12 position-relative">
+                <input [(ngModel)]="search" type="search" class="form-control" placeholder="Search patient...">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+        </div>
+     </div>
+    <div class="form-group mt-1">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>İdentity Number</th>
+                    <th>Full Name</th>
+                    <th>City</th>
+                    <th>Town</th>
+                    <th>Full Address</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(patient of patients() | patient : search() ;track patient)
+                {
+                    <tr>
+                        <td>{{$index+1}}</td>
+                        <td>{{patient.identityNumber}}</td>
+                        <td>{{patient.fullName}}</td>
+                        <td>{{patient.city}}</td>
+                        <td>{{patient.town}}</td>
+                        <td>{{patient.fullAddress}}</td>
+                        <td>
+                            <button (click)="get(patient)" data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-sm btn-outline-primary me-2" title="Update"><i class="fa-solid fa-edit"></i></button>
+                            <button (click)="delete(patient.id,patient.fullName)" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="addModalLabel">Add Patient</h1>
+        <button type="button" #addModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #addForm="ngForm" formValidate (ngSubmit)="add(addForm)" >
+        <div class="modal-body">
+             <div class="form-group">
+                <label for="identityNumber" class="form-label">Identity Number</label>
+                <input [(ngModel)]="patientFormModel().identityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid identity number.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name</label>
+                <input [(ngModel)]="patientFormModel().firstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid first name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input [(ngModel)]="patientFormModel().lastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid last name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="city" class="form-label">City</label>
+                <input [(ngModel)]="patientFormModel().city" name="city" type="text" id="city" class="form-control" placeholder="Enter city" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid city.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="town" class="form-label">Town</label>
+                <input [(ngModel)]="patientFormModel().town" name="town" type="text" id="town" class="form-control" placeholder="Enter town" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid town.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fullAddress" class="form-label">Full Address</label>
+                <input [(ngModel)]="patientFormModel().fullAddress" name="fullAddress" type="text" id="fullAddress" class="form-control" placeholder="Enter full address" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid full address.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-dark w-100">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    
+<!-- Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateModalLabel">Update Patient</h1>
+        <button type="button" #updateModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #updateForm="ngForm" formValidate (ngSubmit)="update(updateForm)" >
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="identityNumber" class="form-label">Identity Number</label>
+                <input [(ngModel)]="patientUpdateFormModel().identityNumber" name="updateIdentityNumber" type="text" id="updateIdentityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid identity number.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name</label>
+                <input [(ngModel)]="patientUpdateFormModel().firstName" name="updateFirstName" type="text" id="updateFirstName" class="form-control" placeholder="Enter first name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid first name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input [(ngModel)]="patientUpdateFormModel().lastName" name="updateLastName" type="text" id="updateLastName" class="form-control" placeholder="Enter last name" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid last name.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="city" class="form-label">City</label>
+                <input [(ngModel)]="patientUpdateFormModel().city" name="updateCity" type="text" id="updateCity" class="form-control" placeholder="Enter city" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid city.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="town" class="form-label">Town</label>
+                <input [(ngModel)]="patientUpdateFormModel().town" name="updateTown" type="text" id="updateTown" class="form-control" placeholder="Enter town" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid town.
+                </div>
+            </div>
+              <div class="form-group">
+                <label for="fullAddress" class="form-label">Full Address</label>
+                <input [(ngModel)]="patientUpdateFormModel().fullAddress" name="updateFullAddress" type="text" id="updateFullAddress" class="form-control" placeholder="Enter full address" required="">
+                <div class="invalid-feedback">
+                    Please provide a valid full address.
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"> 
+            <button type="submit" class="btn btn-primary w-100">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -18,7 +18,10 @@ export class HttpService {
       },
       error: (err: HttpErrorResponse) => {
         if (errorCallback !== undefined) {
-          errorCallback(err);
+          errorCallback(err); 
+        }
+        else {
+          this.#errorService.errorHandler(err);
         }
       },
     });
@@ -49,6 +52,9 @@ export class HttpService {
       error: (err: HttpErrorResponse) => {
         if (errorCallback !== undefined) {
           errorCallback(err);
+          
+        }
+        else {
           this.#errorService.errorHandler(err);
         }
       },
@@ -61,8 +67,11 @@ export class HttpService {
         callback(response);
       },
       error: (err: HttpErrorResponse) => {
-        if (errorCallback !== undefined) {
+       if (errorCallback !== undefined) {
           errorCallback(err);
+          
+        }
+        else {
           this.#errorService.errorHandler(err);
         }
       },

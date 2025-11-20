@@ -17,6 +17,15 @@ public sealed class DoctorsController(ISender sender) : BaseApiController(sender
         return StatusCode((int)result.StatusCode, result);
     }
 
+    [HttpGet]
+    [Route("departments/{id}")] // GET /api/doctors/departments/{id}
+    public async Task<IActionResult> GetAllDoctorsByDepartment(int id, CancellationToken cancellationToken)
+    { 
+        var query = new GetAllDoctorsByDepartmentIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        return StatusCode((int)result.StatusCode, result);
+    }
+
     [HttpPost]
     [Route("")] // POST /api/doctors
     public async Task<IActionResult> CreateDoctor([FromBody] CreateDoctorCommand command, CancellationToken cancellationToken)
@@ -27,12 +36,13 @@ public sealed class DoctorsController(ISender sender) : BaseApiController(sender
 
     [HttpDelete]
     [Route("{id}")] // DELETE /api/doctors/{id}
-    public async Task<IActionResult> DeleteDoctorById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteDoctor(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteDoctorByIdCommand(id);
+        var command = new DeleteDoctorCommand(id);
         var result = await Sender.Send(command, cancellationToken);
         return StatusCode((int)result.StatusCode, result);
     }
+    
     [HttpPut]
     [Route("")] // PUT /api/doctors
     public async Task<IActionResult> UpdateDoctor([FromBody] UpdateDoctorCommand command, CancellationToken cancellationToken)
@@ -40,4 +50,6 @@ public sealed class DoctorsController(ISender sender) : BaseApiController(sender
         var result = await Sender.Send(command, cancellationToken);
         return StatusCode((int)result.StatusCode, result);
     }
+
+
 }
