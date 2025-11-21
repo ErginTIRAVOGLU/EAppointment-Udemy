@@ -20,12 +20,12 @@ public sealed class AppUser : IdentityUser<Guid>
     
     #region Methods
     
-    private void SetFirstName(FirstName firstName)
+    public void SetFirstName(FirstName firstName)
     {
         FirstName = firstName;
     }
     
-    private void SetLastName(LastName lastName)
+    public void SetLastName(LastName lastName)
     {
         LastName = lastName;
     }

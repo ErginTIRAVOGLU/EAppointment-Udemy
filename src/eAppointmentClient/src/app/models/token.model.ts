@@ -5,6 +5,7 @@ export interface TokenModel {
     email: string;
     userName: string;
     exp: number | undefined;
+    roles: string[];
  
 }
 
@@ -14,5 +15,6 @@ export const initialTokenModel: TokenModel = {
     name: '',
     email: '',
     userName: '',
-    exp: -1
+    exp: -1,
+    roles: []
 };

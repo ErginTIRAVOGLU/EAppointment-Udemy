@@ -3,12 +3,12 @@ export interface CreateAppointmentModel {
    endDate: string,
    doctorId: string,
    patientId: string,
-   patientFirstName: string,
-   patientLastName: string,
-   patientIdentityNumber: string,
-   patientCity: string,
-   patientTown: string,
-   patientFullAddress: string
+   FirstName: string,
+   LastName: string,
+   IdentityNumber: string,
+   City: string,
+   Town: string,
+   FullAddress: string
 }
 
 export const initialCreateAppointmentModel: CreateAppointmentModel = {
@@ -16,10 +16,10 @@ export const initialCreateAppointmentModel: CreateAppointmentModel = {
     endDate: '',
     doctorId: '',
     patientId: '',
-    patientFirstName: '',
-    patientLastName: '',
-    patientIdentityNumber: '',
-    patientCity: '',
-    patientTown: '',
-    patientFullAddress: ''
+    FirstName: '',
+    LastName: '',
+    IdentityNumber: '',
+    City: '',
+    Town: '',
+    FullAddress: ''
 };

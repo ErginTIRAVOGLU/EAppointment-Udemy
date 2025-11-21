@@ -61,12 +61,45 @@
         @if(appointments().length == 0){
             <label>No appointments found.</label>
         } @else {
-
-            @for(appointment of appointments() | appointment : search() ; track appointment){
-                <label>{{appointment.id}} - {{appointment.startDate | date:'short'}} - {{appointment.endDate | date:'short'}}  {{appointment.title}} - {{appointment.patientIdentityNumber}} {{appointment.patientFullName}} ({{appointment.patientAddress}})</label>
-                <br />
-            }
-        }
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Detail</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(appointment of appointments() | appointment : search() ; track appointment){
+                        <tr >
+                            <th scope="row">{{$index +1}}</th>
+                            <td>{{appointment.startDate | date:'dd MMMM yyyy HH:mm'}}</td>
+                            <td>{{appointment.endDate | date:'dd MMMM yyyy HH:mm'}}</td>
+                            <td>{{appointment.title}}</td>
+                             <td>
+                                <button class="btn btn-success btn-sm" (click)="openAppointmentDetailModal(appointment)" data-bs-toggle="modal" data-bs-target="#detailModal" >
+                                    <i class="fa-solid fa-info"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" (click)="openAppointmentEditModal(appointment.id)" data-bs-toggle="modal" data-bs-target="#updateModal">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" (click)="deleteAppointment(appointment.id, appointment.title)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }            
     </div>
 </div>
 
@@ -84,42 +117,42 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="identityNumber" class="form-label">Identity Number</label>
-                <input (keydown)="getPatient($event)" [(ngModel)]="appointmentCreateFormModel().patientIdentityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <input (keydown)="getPatient($event)" [(ngModel)]="appointmentCreateFormModel().IdentityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" required="">
                 <div class="invalid-feedback">
                     Please provide a valid identity number.
                 </div>
             </div>
             <div class="form-group">
                 <label for="firstName" class="form-label">First Name</label>
-                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientFirstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" required="">
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().FirstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" required="">
                 <div class="invalid-feedback">
                     Please provide a valid first name.
                 </div>
             </div>
             <div class="form-group">
                 <label for="lastName" class="form-label">Last Name</label>
-                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientLastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" required="">
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().LastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" required="">
                 <div class="invalid-feedback">
                     Please provide a valid last name.
                 </div>
             </div>
            <div class="form-group">
                 <label for="patientCity" class="form-label">Patient City</label>
-                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientCity" name="patientCity" type="text" id="patientCity" class="form-control" placeholder="Enter patient city" required="">
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().City" name="patientCity" type="text" id="patientCity" class="form-control" placeholder="Enter patient city" required="">
                 <div class="invalid-feedback">
                     Please provide a valid patient city.
                 </div>
             </div>
              <div class="form-group">
                 <label for="patientTown" class="form-label">Patient Town</label>
-                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientTown" name="patientTown" type="text" id="patientTown" class="form-control" placeholder="Enter patient town" required="">
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().Town" name="patientTown" type="text" id="patientTown" class="form-control" placeholder="Enter patient town" required="">
                 <div class="invalid-feedback">
                     Please provide a valid patient town.
                 </div>
             </div>
              <div class="form-group">
                 <label for="patientFullAddress" class="form-label">Patient Full Address</label>
-                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().patientFullAddress" name="patientFullAddress" type="text" id="patientFullAddress" class="form-control" placeholder="Enter patient full address" required="">
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentCreateFormModel().FullAddress" name="patientFullAddress" type="text" id="patientFullAddress" class="form-control" placeholder="Enter patient full address" required="">
                 <div class="invalid-feedback">
                     Please provide a valid patient full address.
                 </div>
@@ -152,42 +185,63 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="updateModalLabel">Update Doctor</h1>
+        <h1 class="modal-title fs-5" id="updateModalLabel">Update Appoinntment</h1>
         <button type="button" #updateModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form #updateForm="ngForm" formValidate (ngSubmit)="update(updateForm)" >
         <div class="modal-body">           
-            <div class="form-group">
+             <div class="form-group">
                 <label for="identityNumber" class="form-label">Identity Number</label>
-                <input [(ngModel)]="appointmentUpdateFormModel().patientIdentityNumber" name="updateIdentityNumber" type="text" id="updateIdentityNumber" class="form-control" placeholder="Enter identity number" required="">
+                <input (keydown)="getPatient($event)" [(ngModel)]="appointmentUpdateFormModel().identityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" disabled="">
                 <div class="invalid-feedback">
                     Please provide a valid identity number.
                 </div>
             </div>
             <div class="form-group">
-                <label for="fullName" class="form-label">Full Name</label>
-                <input [(ngModel)]="appointmentUpdateFormModel().patientFullName" name="updateFullName" type="text" id="updateFullName" class="form-control" placeholder="Enter full name" required="">
+                <label for="firstName" class="form-label">First Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().firstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" disabled="">
                 <div class="invalid-feedback">
-                    Please provide a valid full name.
+                    Please provide a valid first name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().lastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid last name.
+                </div>
+            </div>
+           <div class="form-group">
+                <label for="patientCity" class="form-label">Patient City</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().city" name="patientCity" type="text" id="patientCity" class="form-control" placeholder="Enter patient city" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient city.
                 </div>
             </div>
              <div class="form-group">
-                <label for="patientAddress" class="form-label">Patient Address</label>
-                <input [(ngModel)]="appointmentUpdateFormModel().patientAddress" name="updatePatientAddress" type="text" id="updatePatientAddress" class="form-control" placeholder="Enter patient address" required="">
+                <label for="patientTown" class="form-label">Patient Town</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().town" name="patientTown" type="text" id="patientTown" class="form-control" placeholder="Enter patient town" disabled="">
                 <div class="invalid-feedback">
-                    Please provide a valid patient address.
+                    Please provide a valid patient town.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientFullAddress" class="form-label">Patient Full Address</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().fullAddress" name="patientFullAddress" type="text" id="patientFullAddress" class="form-control" placeholder="Enter patient full address" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient full address.
                 </div>
             </div>
             <div class="form-group">
                 <label for="startDate" class="form-label">Start Date</label>
-                <input [(ngModel)]="appointmentUpdateFormModel().startDate" name="updateStartDate" type="text" id="updateStartDate" class="form-control" placeholder="Enter start date" required="">
+                <input [(ngModel)]="appointmentUpdateFormModel().startDate" name="updateStartDate" type="datetime-local" id="updateStartDate" class="form-control" placeholder="Enter start date" required="">
                 <div class="invalid-feedback">
                     Please provide a valid start date.
                 </div>
             </div>
             <div class="form-group">
                 <label for="endDate" class="form-label">End Date</label>
-                <input [(ngModel)]="appointmentUpdateFormModel().endDate" name="updateEndDate" type="text" id="updateEndDate" class="form-control" placeholder="Enter end date" required="">
+                <input [(ngModel)]="appointmentUpdateFormModel().endDate" name="updateEndDate" type="datetime-local"  id="updateEndDate" class="form-control" placeholder="Enter end date" required="">
                 <div class="invalid-feedback">
                     Please provide a valid end date.
                 </div>
@@ -196,6 +250,85 @@
         <div class="modal-footer"> 
             <button type="submit" class="btn btn-primary w-100">Save</button>
         </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailModalLabel">Appointment Detail</h1>
+        <button type="button" #detailModalCloseButton class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #detailForm="ngForm"  >
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="doctorFullName" class="form-label">Doctor FullName</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().doctorFullName" name="doctorFullName" type="text" id="doctorFullName" class="form-control" placeholder="Enter doctor full name" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid doctor full name.
+                </div>
+            </div>       
+            <div class="form-group">
+                <label for="identityNumber" class="form-label">Identity Number</label>
+                <input (keydown)="getPatient($event)" [(ngModel)]="appointmentUpdateFormModel().identityNumber" name="identityNumber" type="text" id="identityNumber" class="form-control" placeholder="Enter identity number" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid identity number.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="firstName" class="form-label">First Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().firstName" name="firstName" type="text" id="firstName" class="form-control" placeholder="Enter first name" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid first name.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().lastName" name="lastName" type="text" id="lastName" class="form-control" placeholder="Enter last name" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid last name.
+                </div>
+            </div>
+           <div class="form-group">
+                <label for="patientCity" class="form-label">Patient City</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().city" name="patientCity" type="text" id="patientCity" class="form-control" placeholder="Enter patient city" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient city.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientTown" class="form-label">Patient Town</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().town" name="patientTown" type="text" id="patientTown" class="form-control" placeholder="Enter patient town" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient town.
+                </div>
+            </div>
+             <div class="form-group">
+                <label for="patientFullAddress" class="form-label">Patient Full Address</label>
+                <input [disabled]="isPatientFound()" [(ngModel)]="appointmentUpdateFormModel().fullAddress" name="patientFullAddress" type="text" id="patientFullAddress" class="form-control" placeholder="Enter patient full address" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid patient full address.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().startDate" name="updateStartDate" type="text" id="updateStartDate" class="form-control" placeholder="Enter start date" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid start date.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="form-label">End Date</label>
+                <input [(ngModel)]="appointmentUpdateFormModel().endDate" name="updateEndDate" type="text" id="updateEndDate" class="form-control" placeholder="Enter end date" disabled="">
+                <div class="invalid-feedback">
+                    Please provide a valid end date.
+                </div>
+            </div>
+        </div> 
       </form>
     </div>
   </div>

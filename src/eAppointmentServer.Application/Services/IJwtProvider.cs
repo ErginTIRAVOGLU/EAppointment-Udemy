@@ -4,5 +4,5 @@ namespace eAppointmentServer.Application.Services;
 
 public interface IJwtProvider
 {
-    string GenerateToken(AppUser user);
+    Task<string> GenerateToken(AppUser user);
 }

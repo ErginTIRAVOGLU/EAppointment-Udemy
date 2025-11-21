@@ -36,7 +36,7 @@ internal sealed class LoginCommandHandler(
         {
             return Result<LoginCommandResponse>.Fail("Invalid username or password.",statusCode : HttpStatusCode.Unauthorized);
         }
-        var token = jwtProvider.GenerateToken(user);
+        var token = await jwtProvider.GenerateToken(user);
         return Result<LoginCommandResponse>.Success(new LoginCommandResponse(Token: token));
     }
 }

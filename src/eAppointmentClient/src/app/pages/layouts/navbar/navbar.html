@@ -6,12 +6,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @if(authService.tokenModel().roles.includes('Admin'))
+        {
         <li class="nav-item">
           <a routerLink="/doctors" class="nav-link" routerLinkActive="active" aria-current="page" >Doctors</a>
         </li>
         <li class="nav-item">
           <a routerLink="/patients" class="nav-link" routerLinkActive="active" aria-current="page" >Patients</a>
-        </li>        
+        </li>    
+        <li class="nav-item">
+          <a routerLink="/users" class="nav-link" routerLinkActive="active" aria-current="page" >Users</a>
+        </li>
+      }     
       </ul>
       <span class="navbar-text">
         Welcome, User

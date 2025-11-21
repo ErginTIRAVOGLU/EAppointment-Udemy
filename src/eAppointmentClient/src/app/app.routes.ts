@@ -23,8 +23,11 @@ export const routes: Routes = [
             {
                 path: 'patients',
                 loadComponent: () => import('./pages/patients/patients').then(m => m.Patients)
+            },
+            {
+                path: 'users',
+                loadComponent: () => import('./pages/users/users').then(m => m.Users)
             }
-            
         ]
     },
     {

@@ -9,6 +9,7 @@ import { AppointmentPipe } from '../../pipes/appointment-pipe';
 import { FormValidateDirective } from 'form-validate-angular';
 import { SwalService } from '../../services/swal-service';
 import { CreateAppointmentModel, initialCreateAppointmentModel } from '../../models/create-appointment.model';
+import { initialUpdateAppointmentModel, UpdateAppointmentModel } from '../../models/update-appointment.model';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class Home implements OnInit {
   readonly selectedDoctorId = signal<string>('0');
 
   readonly appointmentCreateFormModel = signal<CreateAppointmentModel>(initialCreateAppointmentModel);
-  readonly appointmentUpdateFormModel = signal<AppointmentModel>(initialAppointmentModel);
+  readonly appointmentUpdateFormModel = signal<UpdateAppointmentModel>(initialUpdateAppointmentModel);
   @ViewChild('addModalCloseButton') readonly addModalCloseButton: ElementRef<HTMLButtonElement> | undefined;
   @ViewChild('updateModalCloseButton') readonly updateModalCloseButton: ElementRef<HTMLButtonElement> | undefined;
 
@@ -89,7 +90,7 @@ export class Home implements OnInit {
 
   private GetAllAppointmentsByDoctorId(doctorId: string): void {
     this.#http.get<AppointmentModel[]>(`appointments/doctor/${doctorId}`, (response) => {
-        console.log('Appointments fetched successfully:', response.data);
+         
         this.appointments.set(response.data ?? []);
       },
       (error) => {
@@ -120,7 +121,7 @@ export class Home implements OnInit {
       this.#http.put<string>('appointments', this.appointmentUpdateFormModel(), (res)=> {
         this.#swal.callToast(res.data!,'success',3000);
         this.GetAllAppointmentsByDoctorId(this.selectedDoctorId());
-        this.appointmentUpdateFormModel.set(initialAppointmentModel);
+        this.appointmentUpdateFormModel.set(initialUpdateAppointmentModel);
         form.resetForm();
         this.updateModalCloseButton?.nativeElement.click();
       },
@@ -130,42 +131,29 @@ export class Home implements OnInit {
     }
   }
 
-  delete(appointmentId:string, title:string) {
-  
-    this.#swal.callSwal("Delete Appointment", `Deleting appointment: ${title}`, "Delete", () => {
-      this.#http.delete<string>(`appointments/${appointmentId}`, (res) => {
-        this.#swal.callToast(res.data!,'success',3000);
-        this.GetAllAppointmentsByDoctorId(this.selectedDoctorId());
-      },
-      (error) => {
-        console.error('Error deleting appointment:', error);
-      });
-    });
-  }
-
-
+ 
   onAppointmentCreateModalOpen(e:any) {
     e.cancel = false;
-    console.log('Appointment Create Modal Opened : ', e);
+   
     const appointmentCreateFormModel = signal<CreateAppointmentModel>(initialCreateAppointmentModel);
     appointmentCreateFormModel.set({
       startDate: this.date.transform(e.startDate, 'yyyy-MM-ddTHH:mm:ss') ?? '', 
       endDate: this.date.transform(e.endDate, 'yyyy-MM-ddTHH:mm:ss') ?? '',
       doctorId: this.selectedDoctorId(), 
       patientId: '', 
-      patientFirstName: '', 
-      patientLastName: '', 
-      patientIdentityNumber: '', 
-      patientCity: '', 
-      patientTown: '', 
-      patientFullAddress: ''});
+      FirstName: '', 
+      LastName: '', 
+      IdentityNumber: '', 
+      City: '', 
+      Town: '', 
+      FullAddress: ''});
     this.isPatientFound.set(false);
   }
 
   getPatient(event:any) {
    if(event.key === 'Enter' || event.key === 'Tab') {
       event.preventDefault();
-       const identityNumber = this.appointmentCreateFormModel().patientIdentityNumber;
+       const identityNumber = this.appointmentCreateFormModel().IdentityNumber;
     if(identityNumber.length >3) {
       this.#http.get<any>(`patients/identityNumber/${identityNumber}`, (response) => {
           const patient = response.data;
@@ -173,11 +161,11 @@ export class Home implements OnInit {
             this.appointmentCreateFormModel.update(current => ({
               ...current, 
               patientId: patient.id,
-              patientFirstName: patient.firstName,
-              patientLastName: patient.lastName,
-              patientCity: patient.city,
-              patientTown: patient.town,
-              patientFullAddress: patient.fullAddress,
+              FirstName: patient.firstName,
+              LastName: patient.lastName,
+              City: patient.city,
+              Town: patient.town,
+              FullAddress: patient.fullAddress,
               doctorId: this.selectedDoctorId(),
 
             }));
@@ -187,11 +175,11 @@ export class Home implements OnInit {
             this.appointmentCreateFormModel.update( current => ({
               ...current, 
               patientId: '',
-              patientFirstName: '',
-              patientLastName: '',
-              patientCity: '',
-              patientTown: '',
-              patientFullAddress: '',
+              FirstName: '',
+              LastName: '',
+              City: '',
+              Town: '',
+              FullAddress: '',
               doctorId: this.selectedDoctorId(),
             }));
             this.isPatientFound.set(false);
@@ -205,11 +193,11 @@ export class Home implements OnInit {
             this.appointmentCreateFormModel.update( current => ({
               ...current, 
               patientId: '',
-              patientFirstName: '',
-              patientLastName: '',
-              patientCity: '',
-              patientTown: '',
-              patientFullAddress: '',
+              FirstName: '',
+              LastName: '',
+              City: '',
+              Town: '',
+              FullAddress: '',
               doctorId: this.selectedDoctorId(),
             }));
             this.isPatientFound.set(false);
@@ -217,5 +205,48 @@ export class Home implements OnInit {
         });
       }
     }  
-  }  
+  }
+  
+  openAppointmentDetailModal(appointment:AppointmentModel) {
+    
+    this.#http.get<UpdateAppointmentModel>(`appointments/${appointment.id}`, (response) => {
+   
+        const appointmentDetail = response.data;
+        if(appointmentDetail) {
+          this.appointmentUpdateFormModel.set(appointmentDetail);
+        }
+      },
+      (error) => {
+        console.error('Error fetching appointment details:', error);
+      }
+    );
+    
+  }
+
+  openAppointmentEditModal(id:string) {
+    this.#http.get<UpdateAppointmentModel>(`appointments/${id}`, (response) => {
+      
+        const appointmentDetail = response.data;
+        if(appointmentDetail) {
+          this.appointmentUpdateFormModel.set(appointmentDetail);
+        }
+      },
+      (error) => {
+        console.error('Error fetching appointment details:', error);
+      }
+    );
+  }
+  deleteAppointment(appointmentId:string, title:string) {
+    this.#swal.callSwal("Delete Appointment", `Are you sure you want to delete the appointment: ${title}?`, "Delete", () => {
+ 
+      this.#http.delete<string>(`appointments/${appointmentId}`, (res) => {
+        this.#swal.callToast(res.data!,'success',3000);
+        this.GetAllAppointmentsByDoctorId(this.selectedDoctorId());
+      },
+      (error) => {
+        console.error('Error deleting appointment:', error);
+      });
+    });
+  }
+
 }

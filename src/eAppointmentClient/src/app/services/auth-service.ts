@@ -22,7 +22,8 @@ export class AuthService {
         name: decodedToken.name ?? decodedToken["name"],
         email: decodedToken.email ?? decodedToken["email"],
         userName: decodedToken.UserName ?? decodedToken["UserName"],
-        exp: decodedToken.exp ?? decodedToken["exp"]
+        exp: decodedToken.exp ?? decodedToken["exp"],
+        roles: decodedToken.roles ?? decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? [],
       };
 
       const now= new Date().getTime() / 1000;
